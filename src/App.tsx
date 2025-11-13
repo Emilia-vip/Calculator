@@ -1,51 +1,45 @@
 import React, { useState } from "react";
+import "./App.css";
 
 function Calculator() {
-  const [display, setDisplay] = useState(""); 
+  const [display, setDisplay] = useState("");
 
-
-  const handleClick = (value: string) => {
-    setDisplay((prev) => prev + value);
-  };
-
-
-  const handleClear = () => {
-    setDisplay("");
-  };
-
-
+  const handleClick = (value: string) => setDisplay(prev => prev + value);
+  const handleClear = () => setDisplay("");
   const handleCalculate = () => {
     try {
-      const result = eval(display); 
-      setDisplay(result.toString());
-    } catch (error) {
+      setDisplay(eval(display).toString());
+    } catch {
       setDisplay("Error");
     }
   };
 
+
+  const buttons = [
+    "7","8","9","/",
+    "4","5","6","*",
+    "1","2","3","-",
+    "0","C","=","+"
+  ];
+
   return (
-    <div>
-      <h1>Mini-kalkylator</h1>
-      <input type="text" value={display} readOnly />
+    <div className="calculator-wrapper">
+      <div className="calculator">
+        <input type="text" value={display} readOnly />
 
-      <div>
-       
-        {[1,2,3,4,5,6,7,8,9,0].map((num) => (
-          <button key={num} onClick={() => handleClick(num.toString())}>
-            {num}
-          </button>
-        ))}
-
-        
-        {["+", "-", "*", "/"].map((op) => (
-          <button key={op} onClick={() => handleClick(op)}>
-            {op}
-          </button>
-        ))}
-
-        
-        <button onClick={handleClear}>C</button>
-        <button onClick={handleCalculate}>=</button>
+        <div className="button-grid">
+          {buttons.map(btn => {
+            if (btn === "C") {
+              return <button key={btn} className="clear" onClick={handleClear}>{btn}</button>;
+            } else if (btn === "=") {
+              return <button key={btn} className="equal" onClick={handleCalculate}>{btn}</button>;
+            } else if (["/","*","-","+"].includes(btn)) {
+              return <button key={btn} className="operator" onClick={() => handleClick(btn)}>{btn}</button>;
+            } else {
+              return <button key={btn} className="number" onClick={() => handleClick(btn)}>{btn}</button>;
+            }
+          })}
+        </div>
       </div>
     </div>
   );
