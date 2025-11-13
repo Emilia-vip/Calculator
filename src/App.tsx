@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+function Calculator() {
+  const [display, setDisplay] = useState(""); 
+
+
+  const handleClick = (value: string) => {
+    setDisplay((prev) => prev + value);
+  };
+
+
+  const handleClear = () => {
+    setDisplay("");
+  };
+
+
+  const handleCalculate = () => {
+    try {
+      const result = eval(display); 
+      setDisplay(result.toString());
+    } catch (error) {
+      setDisplay("Error");
+    }
+  };
 
   return (
-    <>
+    <div>
+      <h1>Mini-kalkylator</h1>
+      <input type="text" value={display} readOnly />
+
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+       
+        {[1,2,3,4,5,6,7,8,9,0].map((num) => (
+          <button key={num} onClick={() => handleClick(num.toString())}>
+            {num}
+          </button>
+        ))}
+
+        
+        {["+", "-", "*", "/"].map((op) => (
+          <button key={op} onClick={() => handleClick(op)}>
+            {op}
+          </button>
+        ))}
+
+        
+        <button onClick={handleClear}>C</button>
+        <button onClick={handleCalculate}>=</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default Calculator;
